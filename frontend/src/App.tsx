@@ -53,8 +53,6 @@ function TipsSection({
   );
 }
 
-
-
 export default function App() {
   const [error, setError] = useState<string | null>(null)
   const [file, setFile] = useState<File | null>(null)
@@ -116,8 +114,8 @@ export default function App() {
 
   return (
     <div className="grid place-items-center min-h-screen bg-muted p-4">
-      <div className="w-full max-w-md space-y-4">
-        <Card>
+      <div className="w-full max-w-4xl space-y-4">
+        <Card className="max-w-md mx-auto">
           <CardHeader>
             <CardTitle>Upload Document</CardTitle>
             <CardDescription>
@@ -148,7 +146,7 @@ export default function App() {
         </Card>
 
         {feedback && (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <TipsSection title="Overall Feedback" items={feedback.overall_feedback} />
             <TipsSection title="Education Tips" items={feedback.education_tips} />
             <TipsSection title="Experience Tips" items={feedback.experience_tips} />
