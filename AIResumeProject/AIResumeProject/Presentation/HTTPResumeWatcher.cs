@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace AIResumeProject.Presentation
 {
-    [DisableCors]
     public class HTTPResumeWatcher
     {
         private readonly HttpClient _httpClient;
