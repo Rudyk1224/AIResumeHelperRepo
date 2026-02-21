@@ -18,5 +18,7 @@ namespace AIResumeProject.Backend
         public string Status { get; set; } = "queued"; // queued or processing or done or failed
         public object? Result { get; set; }
         public string? Error { get; set; }
+        public string ResumeText { get; set; }
+
     }
 }
