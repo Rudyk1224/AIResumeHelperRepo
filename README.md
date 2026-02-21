@@ -30,8 +30,15 @@ We plan to continue improving the project by:
 - Improving UI feedback and visualization  
 - Deploying the system for broader student use  
 
+- Go to the react client folder then run
+
+```
+  npm run dev
+```
+
 #To run the C# project, you need this local.settings.json file containing:
 
+```
 {
   "IsEncrypted": false,
   "Values": {
@@ -43,3 +50,4 @@ We plan to continue improving the project by:
     "CORSCredentials": true
   }
 }
+```
