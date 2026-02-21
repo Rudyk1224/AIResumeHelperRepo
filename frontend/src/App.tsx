@@ -2,7 +2,6 @@
 "use client";
 
 import "./App.css"
-import { MoveRight } from 'lucide-react';
 
 import {
   Card,
@@ -116,48 +115,49 @@ export default function App() {
   }
 
   return (
-    <div className="grid place-items-center h-screen bg-muted">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Upload Document</CardTitle>
-          <CardDescription>
-            PDF or LaTeX (.tex) files only
-          </CardDescription>
-        </CardHeader>
+    <div className="grid place-items-center min-h-screen bg-muted p-4">
+      <div className="w-full max-w-md space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Upload Document</CardTitle>
+            <CardDescription>
+              PDF or LaTeX (.tex) files only
+            </CardDescription>
+          </CardHeader>
 
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Field>
-              <FieldLabel htmlFor="file">Upload Document</FieldLabel>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Field>
+                <FieldLabel htmlFor="file">Upload Document</FieldLabel>
 
-              <Input
-                id="file"
-                type="file"
-                accept=".pdf,.tex,application/pdf"
-                onChange={handleChange}
-              />
+                <Input
+                  id="file"
+                  type="file"
+                  accept=".pdf,.tex,application/pdf"
+                  onChange={handleChange}
+                />
 
-              {error && <FieldError>{error}</FieldError>}
-            </Field>
+                {error && <FieldError>{error}</FieldError>}
+              </Field>
 
-            <Button variant="outline" type="submit" disabled={isLoading}>
-              {isLoading ? "Uploading..." : "Submit"}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              <Button variant="outline" type="submit" disabled={isLoading}>
+                {isLoading ? "Uploading..." : "Submit"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
-      {feedback && (
-        <div className="space-y-3">
-          <TipsSection title="Overall Feedback" items={feedback.overall_feedback} />
-          <TipsSection title="Education Tips" items={feedback.education_tips} />
-          <TipsSection title="Experience Tips" items={feedback.experience_tips} />
-          <TipsSection title="Projects Tips" items={feedback.projects_tips} />
-          <TipsSection title="Skills Tips" items={feedback.skills_tips} />
-          <TipsSection title="ATS Tips" items={feedback.ats_tips} />
-        </div>
-      )}
+        {feedback && (
+          <div className="space-y-3">
+            <TipsSection title="Overall Feedback" items={feedback.overall_feedback} />
+            <TipsSection title="Education Tips" items={feedback.education_tips} />
+            <TipsSection title="Experience Tips" items={feedback.experience_tips} />
+            <TipsSection title="Projects Tips" items={feedback.projects_tips} />
+            <TipsSection title="Skills Tips" items={feedback.skills_tips} />
+            <TipsSection title="ATS Tips" items={feedback.ats_tips} />
+          </div>
+        )}
+      </div>
     </div>
-
   )
 }
