@@ -105,6 +105,8 @@ export default function App() {
     })
       .then(res => {
         console.log("Upload successful:", res.data)
+
+        setFeedback(res.data);
       })
       .catch(err => {
         console.error("Upload failed:", err)
@@ -144,6 +146,7 @@ export default function App() {
           </form>
         </CardContent>
       </Card>
+
       {feedback && (
         <div className="space-y-3">
           <TipsSection title="Overall Feedback" items={feedback.overall_feedback} />
