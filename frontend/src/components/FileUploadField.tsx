@@ -9,6 +9,7 @@ import axios from "axios"
 export default function FileUploadForm() {
     const [error, setError] = useState<string | null>(null)
     const [file, setFile] = useState<File | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const selected = e.target.files?.[0]
@@ -37,6 +38,7 @@ export default function FileUploadForm() {
         }
 
         console.log("Submitting file:", file)
+        setIsLoading(true)
 
         axios({
             method: "post",
@@ -46,8 +48,14 @@ export default function FileUploadForm() {
                 "Content-Type": file.type || "application/octet-stream",
             },
         })
-            .then(res => console.log("Upload successful:", res.data))
-            .catch(err => console.error("Upload failed:", err));
+            .then(res => {
+                console.log("Upload successful:", res.data)
+            })
+            .catch(err => {
+                console.error("Upload failed:", err)
+                setError("Upload failed. Please try again.")
+            })
+            .finally(() => setIsLoading(false));
     }
 
     return (
@@ -65,7 +73,9 @@ export default function FileUploadForm() {
                 {error && <FieldError>{error}</FieldError>}
             </Field>
 
-            <Button variant="outline" type="submit">Submit</Button>
+            <Button variant="outline" type="submit" disabled={isLoading}>
+                {isLoading ? "Uploading..." : "Submit"}
+            </Button>
         </form>
     )
 }
