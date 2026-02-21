@@ -19,7 +19,7 @@ namespace AIResumeProject
         }
 
         [Function("UploadResume")]
-        public async Task<IActionResult> HandleResumePDF([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> HandleResumePDF([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request. Handling Resume PDF");
             using var memoryStream = new MemoryStream();
