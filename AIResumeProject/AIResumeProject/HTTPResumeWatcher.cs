@@ -3,32 +3,51 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AIResumeProject
 {
     public class HTTPResumeWatcher
     {
+        private readonly HttpClient _httpClient;
         private readonly ILogger<HTTPResumeWatcher> _logger;
-        private readonly PDFExtractorService pdfExtractorService;
 
-        public HTTPResumeWatcher(ILogger<HTTPResumeWatcher> logger, PDFExtractorService pdfService)
+        public HTTPResumeWatcher(
+            ILogger<HTTPResumeWatcher> logger,
+            IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
-            pdfExtractorService = pdfService;
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         [Function("UploadResume")]
-        public async Task<IActionResult> HandleResumePDF([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> HandleResumePDF(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request. Handling Resume PDF");
-            using var memoryStream = new MemoryStream();
-            await req.Body.CopyToAsync(memoryStream); //copy the request's body containing the data (or PDF bytes) to the blank memory stream
-            memoryStream.Position = 0; //reset the position of the pointer to the start of the PDF bytes
+            var payload = new
+            {
+                model = "phi3:medium-128k",
+                prompt = req.Body.ToString(),
+                system = "Reply shortly.",
+                stream = false
+            };
 
-            pdfExtractorService.ExtractTextFromPDF(memoryStream);
+            var response = await _httpClient.PostAsync(
+                "http://localhost:11434/api/generate",
+                new StringContent(
+                    JsonSerializer.Serialize(payload),
+                    Encoding.UTF8,
+                    "application/json"));
 
-            return new OkObjectResult("Welcome to Azure Functions!");
+            var json = await response.Content.ReadAsStringAsync();
+
+            using var doc = JsonDocument.Parse(json);
+            var modelResponse = doc.RootElement.GetProperty("response").GetString();
+
+            return new OkObjectResult(modelResponse);
         }
     }
 }
