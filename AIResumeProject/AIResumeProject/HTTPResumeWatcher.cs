@@ -14,25 +14,34 @@ namespace AIResumeProject
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<HTTPResumeWatcher> _logger;
+        private readonly PDFExtractorService _pdfExtractorService;
 
         public HTTPResumeWatcher(
             ILogger<HTTPResumeWatcher> logger,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory, 
+            PDFExtractorService _pdfExtractrorService)
         {
             _logger = logger;
             _httpClient = httpClientFactory.CreateClient();
+            _pdfExtractorService = _pdfExtractrorService;   
         }
 
         [Function("UploadResume")]
-        public async Task<IActionResult> HandleResumePDF(
+        public async Task<ObjectResult> HandleResumePDF(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
+            using var memoryStream = new MemoryStream();
+            await req.Body.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
+
+            string pdfText = _pdfExtractorService.ExtractTextFromPDF(memoryStream);
+
             var payload = new
             {
                 model = "phi3:medium-128k",
-                prompt = req.Body.ToString(),
-                system = "Reply shortly.",
-                stream = false
+                prompt = pdfText,
+                system = "Summarize in one sentence.",
+                stream = false,
             };
 
             var response = await _httpClient.PostAsync(
