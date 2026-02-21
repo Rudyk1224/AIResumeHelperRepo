@@ -1,9 +1,10 @@
 "use client"
 
-import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui/field"
+import { Field, FieldLabel, FieldError } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import axios from "axios"
 
 export default function FileUploadForm() {
     const [error, setError] = useState<string | null>(null)
@@ -37,7 +38,16 @@ export default function FileUploadForm() {
 
         console.log("Submitting file:", file)
 
-        // TODO: send to API / server action
+        axios({
+            method: "post",
+            url: "http://localhost:7293/api/UploadResume",
+            data: file,
+            headers: {
+                "Content-Type": file.type || "application/octet-stream",
+            },
+        })
+            .then(res => console.log("Upload successful:", res.data))
+            .catch(err => console.error("Upload failed:", err));
     }
 
     return (
