@@ -18,12 +18,12 @@ namespace AIResumeProject
 
         public HTTPResumeWatcher(
             ILogger<HTTPResumeWatcher> logger,
-            IHttpClientFactory httpClientFactory, 
+            IHttpClientFactory httpClientFactory,
             PDFExtractorService _pdfExtractrorService)
         {
             _logger = logger;
             _httpClient = httpClientFactory.CreateClient();
-            _pdfExtractorService = _pdfExtractrorService;   
+            _pdfExtractorService = _pdfExtractrorService;
         }
 
         [Function("UploadResume")]
@@ -36,12 +36,58 @@ namespace AIResumeProject
 
             string pdfText = _pdfExtractorService.ExtractTextFromPDF(memoryStream);
 
+            string systemPrompt = """"
+            You are a resume reviewer for early-career students.
+            Give actionable, specific tips.
+            Do not invent experience
+
+            Rules:
+            - Each section must contain 2–5 concise tips
+            - Tips must be actionable and specific
+            - Do not invent experience
+            - If a section is missing, explain what to add
+            """";
+
+            string userPrompt = $"""
+            Analyze the following resume and provide improvement tips:
+
+            {pdfText}
+            """;
+
+            var format = new
+                    {
+                        type = "object",
+                        properties = new
+                        {
+                            overall_feedback = new { type = "array", items = new { type = "string" } },
+                            education_tips = new { type = "array", items = new { type = "string" } },
+                            experience_tips = new { type = "array", items = new { type = "string" } },
+                            projects_tips = new { type = "array", items = new { type = "string" } },
+                            skills_tips = new { type = "array", items = new { type = "string" } },
+                            ats_tips = new { type = "array", items = new { type = "string" } }
+                        },
+                        required = new[]
+            {
+                "overall_feedback",
+                "education_tips",
+                "experience_tips",
+                "projects_tips",
+                "skills_tips",
+                "ats_tips"
+            }
+                    };
+
             var payload = new
             {
-                model = "phi3:medium-128k",
-                prompt = pdfText,
-                system = "Summarize in one sentence.",
+                model = "phi3",
+                system = systemPrompt,
+                prompt = userPrompt,
+                format = format,
                 stream = false,
+                options = new
+                {
+                    temperature = 0.2 // Creativeness of the model (very deterministic, consistent, factual)
+                }
             };
 
             var response = await _httpClient.PostAsync(
@@ -56,7 +102,12 @@ namespace AIResumeProject
             using var doc = JsonDocument.Parse(json);
             var modelResponse = doc.RootElement.GetProperty("response").GetString();
 
-            return new OkObjectResult(modelResponse);
+            if (string.IsNullOrEmpty(modelResponse)) {
+                return new BadRequestObjectResult("Something went wrong!");
+            }
+
+            var structuredObject = JsonSerializer.Deserialize<object>(modelResponse);
+            return new OkObjectResult(structuredObject);
         }
     }
 }
