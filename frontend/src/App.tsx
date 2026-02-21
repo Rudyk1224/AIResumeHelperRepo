@@ -1,5 +1,6 @@
 import "./App.css"
 import FileUploadField from "./components/FileUploadField"
+import { MoveRight } from 'lucide-react';
 
 import {
   Card,
@@ -24,6 +25,11 @@ export default function App() {
           <FileUploadField />
         </CardContent>
       </Card>
+      <MoveRight className="absolute top-110 w-12 h-12 rotate-270" size={170} color="green" strokeWidth={2.4} />
+      <h3> Upload Resume </h3>
+
+
     </div>
+
   )
 }
