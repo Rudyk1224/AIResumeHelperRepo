@@ -200,7 +200,7 @@ export default function App() {
         <DoodleArrow className="h-28 w-28 rotate-[140deg]" />
       </motion.div>
 
-      <div className="relative grid place-items-center min-h-screen p-4">
+      <div className="relative z-10 grid place-items-center min-h-screen p-4">
         <div className="w-full max-w-5xl space-y-6">
 
           <motion.div
@@ -215,7 +215,7 @@ export default function App() {
               transition={{ duration: 6, repeat: Infinity }}
               className="text-4xl md:text-5xl font-bold tracking-tight"
             >
-              AI Resume Helper
+              Help My Resume
             </motion.h1>
 
             {/* Subtitle */}
@@ -320,14 +320,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Floating Blob - Left Bottom */}
-      <motion.div
-        className="absolute -left-24 bottom-[-60px] text-primary/10"
-        animate={{ y: [0, 12, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      >
-        <Squiggle className="h-72 w-72" />
-      </motion.div>
 
       {/* Floating Blob - Right Top */}
       <motion.div
@@ -370,13 +362,13 @@ export default function App() {
         <DoodleArrow className="h-24 w-24 rotate-[140deg]" />
       </motion.div>
 
-      <motion.div
+      {/* <motion.div
         className="absolute top-[48%] right-[18%] text-foreground/5"
         animate={{ rotate: [0, 25, 0] }}
         transition={{ duration: 18, repeat: Infinity }}
       >
         <StarBurst className="h-72 w-72 rotate-[32deg]" />
-      </motion.div>
+      </motion.div> */}
     </div>
   );
 }
