@@ -36,7 +36,7 @@ We plan to continue improving the project by:
   npm run dev
 ```
 
-#To run the C# project, you need this local.settings.json file containing:
+# To run the C# project, you need this local.settings.json file containing:
 
 ```
 {
