@@ -84,6 +84,45 @@ function DoodleArrow(props: { className?: string }) {
   );
 }
 
+function SparkleDoodle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className}>
+      <path
+        d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function StarBurst({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className}>
+      <g stroke="currentColor" strokeWidth="6" strokeLinecap="round">
+        <line x1="50" y1="10" x2="50" y2="90" />
+        <line x1="10" y1="50" x2="90" y2="50" />
+        <line x1="20" y1="20" x2="80" y2="80" />
+        <line x1="80" y1="20" x2="20" y2="80" />
+      </g>
+    </svg>
+  );
+}
+
+
+function Squiggle({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 200 40" className={className}>
+      <path
+        d="M0 20 Q25 0 50 20 T100 20 T150 20 T200 20"
+        stroke="currentColor"
+        strokeWidth="6"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -163,6 +202,42 @@ export default function App() {
 
       <div className="relative grid place-items-center min-h-screen p-4">
         <div className="w-full max-w-5xl space-y-6">
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative text-center space-y-3"
+          >
+            {/* Main Title */}
+            <motion.h1
+              animate={{ y: [0, -4, 0] }}
+              transition={{ duration: 6, repeat: Infinity }}
+              className="text-4xl md:text-5xl font-bold tracking-tight"
+            >
+              AI Resume Helper
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+              transition={{ delay: 0.3 }}
+              className="text-muted-foreground text-sm md:text-base"
+            >
+              Upload your resume and get smart, structured feedback in seconds.
+            </motion.p>
+
+            {/* Decorative underline */}
+            <motion.div
+              animate={{ x: [0, 8, 0] }}
+              transition={{ duration: 8, repeat: Infinity }}
+              className="flex justify-center"
+            >
+              <Squiggle className="h-6 w-40 text-primary/30 rotate-[4deg]" />
+            </motion.div>
+          </motion.div>
+
           {/* Cute “steps” row */}
           <div className="mx-auto max-w-md flex items-center justify-between text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-2">
@@ -244,6 +319,64 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Floating Blob - Left Bottom */}
+      <motion.div
+        className="absolute -left-24 bottom-[-60px] text-primary/10"
+        animate={{ y: [0, 12, 0], rotate: [0, 5, 0] }}
+        transition={{ duration: 8, repeat: Infinity }}
+      >
+        <Squiggle className="h-72 w-72" />
+      </motion.div>
+
+      {/* Floating Blob - Right Top */}
+      <motion.div
+        className="absolute -right-24 top-[-40px] text-secondary/10"
+        animate={{ y: [0, -10, 0], rotate: [0, -6, 0] }}
+        transition={{ duration: 10, repeat: Infinity }}
+      >
+        <SparkleDoodle className="h-64 w-64" />
+      </motion.div>
+
+      <motion.div
+        className="absolute -top-16 -left-20 text-foreground/10"
+        animate={{ rotate: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Infinity }}
+      >
+        <StarBurst className="h-40 w-40 rotate-[23deg]" />
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[32%] left-[22%] text-foreground/10"
+        animate={{ x: [0, 12, 0], rotate: [0, 6, 0] }}
+        transition={{ duration: 11, repeat: Infinity }}
+      >
+        <Squiggle className="h-24 w-40 rotate-[12deg]" />
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[14%] left-[58%] text-primary/20"
+        animate={{ rotate: [0, 40, 0], scale: [1, 1.1, 1] }}
+        transition={{ duration: 8, repeat: Infinity }}
+      >
+        <SparkleDoodle className="h-10 w-10 rotate-[-18deg]" />
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[70%] left-[12%] text-secondary/15"
+        animate={{ rotate: [0, -20, 0], y: [0, 10, 0] }}
+        transition={{ duration: 13, repeat: Infinity }}
+      >
+        <DoodleArrow className="h-24 w-24 rotate-[140deg]" />
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[48%] right-[18%] text-foreground/5"
+        animate={{ rotate: [0, 25, 0] }}
+        transition={{ duration: 18, repeat: Infinity }}
+      >
+        <StarBurst className="h-72 w-72 rotate-[32deg]" />
+      </motion.div>
     </div>
   );
 }
