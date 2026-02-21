@@ -1,5 +1,4 @@
 using AIResumeProject.Backend;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -11,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace AIResumeProject.Presentation
 {
-    [DisableCors]
     public class HTTPResumeWatcher
     {
         private readonly HttpClient _httpClient;
